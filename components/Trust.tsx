@@ -9,7 +9,7 @@ const Trust = () => {
     { src: '/trust/secure.svg', alt: 'Secure', width: 69, height: 69 },
     { src: '/trust/iso.svg', alt: 'ISO Certified', width: 69, height: 69 },
     { src: '/trust/encr.svg', alt: 'Encrypted', width: 69, height: 69 },
-    { src: '/trust/axis.svg', alt: 'Axis Bank', width: 100, height: 100 },
+    // { src: '/trust/axis.svg', alt: 'Axis Bank', width: 100, height: 100 },
   ]
 
   return (
@@ -26,7 +26,7 @@ const Trust = () => {
             Bank Grade Security, Fully Encrypted, 24X7 Customer Support
           </p>
           
-          <div className="bg-white rounded-xl py-6 md:py-8 px-4 md:px-6 lg:px-8 w-full max-w-4xl shadow-lg">
+          <div className="bg-white rounded-xl py-6 md:py-8 px-4 md:px-6 lg:px-8 w-full max-w-3xl shadow-lg">
             <div className="flex flex-wrap items-center justify-between gap-6 md:gap-8 lg:gap-12">
               {certifications.map((cert, index) => (
                 <div

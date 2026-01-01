@@ -30,7 +30,7 @@ const HowItWorks = () => {
     <section className='w-full bg-[#111A27]'>
       <div className='max-w-7xl mx-auto py-12 md:py-20 px-4 md:px-6'>
         {/* Header Section */}
-        <div className='text-center md:text-left mb-10 md:mb-12'>
+        <div className='mb-10 md:mb-12'>
           <p className='font-semibold text-[#738EB9] text-sm md:text-lg uppercase tracking-wide'>
             How It Works
           </p>
