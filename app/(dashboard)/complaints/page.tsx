@@ -118,7 +118,7 @@ export default function ComplaintsPage() {
     <div className="px-4">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Complaints</h1>
-        <Button onClick={() => setShowModal(true)} variant="primary">
+        <Button onClick={() => setShowModal(true)}>
           New Complaint
         </Button>
       </div>

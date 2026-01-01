@@ -109,17 +109,17 @@ export default function DashboardPage() {
           <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
           <div className="space-y-3">
             <Link href="/recharge">
-              <Button className="w-full" variant="primary">
+              <Button className="w-full">
                 Mobile Recharge
               </Button>
             </Link>
             <Link href="/wallet/add-money">
-              <Button className="w-full" variant="secondary">
+              <Button className="w-full">
                 Add Money
               </Button>
             </Link>
             <Link href="/wallet">
-              <Button className="w-full" variant="secondary">
+              <Button className="w-full" >
                 Fund Transfer
               </Button>
             </Link>

@@ -160,7 +160,6 @@ export default function WalletPage() {
             <Button
               onClick={() => setShowAddMoney(true)}
               className="w-full"
-              variant="primary"
             >
               Add Money
             </Button>

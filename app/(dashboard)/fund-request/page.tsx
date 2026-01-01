@@ -140,7 +140,7 @@ export default function FundRequestPage() {
     <div className="px-4">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Fund Request</h1>
-        <Button onClick={() => setShowForm(!showForm)} variant="primary">
+        <Button onClick={() => setShowForm(!showForm)}>
           {showForm ? 'Cancel' : 'New Request'}
         </Button>
       </div>
