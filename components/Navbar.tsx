@@ -2,7 +2,8 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { Menu, X } from "lucide-react"
+import Image from "next/image"
+import { Menu } from "lucide-react"
 
 import { useIsMobile } from "@/hooks/use-mobile"
 import {
@@ -14,7 +15,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
-import { Sheet, SheetContent, SheetClose } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/Button"
 
 const serviceItems = [
@@ -95,12 +96,28 @@ export function Navbar() {
         <Menu className="h-6 w-6" />
       </Button>
       <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-        <SheetContent className="w-full sm:max-w-sm">
-          <div className="flex flex-col h-full pt-8 relative">
-            <SheetClose onClick={() => setMobileMenuOpen(false)} />
-            <nav className="flex-1 space-y-4">
-              <div>
-                <h3 className="px-4 mb-2 text-sm font-semibold text-gray-500 uppercase tracking-wider">
+        <SheetContent side="right" className="w-[40%] min-w-[320px] max-w-[400px] p-0 [&>button]:top-6 [&>button]:right-6">
+          <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+          <div className="flex flex-col h-full">
+            {/* Header with Logo */}
+            <div className="flex items-center px-6 pt-6 pb-4 border-b border-border">
+              <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center">
+                <Image
+                  src="/logo-pink.png"
+                  alt="Payshati Logo"
+                  width={120}
+                  height={40}
+                  className="h-8 w-auto"
+                  priority
+                />
+              </Link>
+            </div>
+
+            {/* Navigation Content */}
+            <nav className="flex-1 overflow-y-auto px-4 py-6 space-y-6">
+              {/* Services Section */}
+              <div className="space-y-3">
+                <h3 className="px-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                   Services
                 </h3>
                 <ul className="space-y-1">
@@ -109,23 +126,29 @@ export function Navbar() {
                       <Link
                         href={item.href}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="flex flex-col px-4 py-3 text-base font-medium text-gray-900 hover:bg-gray-50 rounded-md transition-colors"
+                        className="flex flex-col px-4 py-3 rounded-lg text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground transition-all duration-200 group"
                       >
-                        <span>{item.title}</span>
-                        <span className="text-sm text-gray-500">{item.description}</span>
+                        <span className="group-hover:translate-x-1 transition-transform duration-200">
+                          {item.title}
+                        </span>
+                        <span className="text-sm text-muted-foreground mt-0.5">
+                          {item.description}
+                        </span>
                       </Link>
                     </li>
                   ))}
                 </ul>
               </div>
-              <div className="border-t border-gray-200 pt-4">
+
+              {/* Navigation Links Section */}
+              <div className="space-y-3 pt-2 border-t border-border">
                 <ul className="space-y-1">
                   {navLinks.map((link) => (
                     <li key={link.href}>
                       <Link
                         href={link.href}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="block px-4 py-3 text-base font-medium text-gray-900 hover:bg-gray-50 rounded-md transition-colors"
+                        className="block px-4 py-3 rounded-lg text-base font-medium text-foreground hover:bg-accent hover:text-accent-foreground transition-all duration-200 hover:translate-x-1"
                       >
                         {link.label}
                       </Link>
@@ -134,12 +157,25 @@ export function Navbar() {
                 </ul>
               </div>
             </nav>
-            <div className="border-t border-gray-200 pt-4 pb-6 px-4 space-y-2">
-              <Button className="w-full" variant="outline" onClick={() => setMobileMenuOpen(false)}>
-                Login
+
+            {/* Footer with Action Buttons */}
+            <div className="border-t border-border bg-muted/30 p-4 space-y-3">
+              <Button
+                className="w-full"
+                variant="outline"
+                asChild
+              >
+                <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
+                  Login
+                </Link>
               </Button>
-              <Button className="w-full" onClick={() => setMobileMenuOpen(false)}>
-                Signup
+              <Button
+                className="w-full"
+                asChild
+              >
+                <Link href="/signup" onClick={() => setMobileMenuOpen(false)}>
+                  Sign Up
+                </Link>
               </Button>
             </div>
           </div>

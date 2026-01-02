@@ -11,8 +11,23 @@ import { Loading } from '../../../components/ui/Loading';
 import { Card } from '../../../components/ui/Card';
 import { Button } from '../../../components/ui/Button';
 import { HomeData } from '../../../types/api';
+import { 
+  Smartphone, 
+  Wallet, 
+  ArrowRight, 
+  TrendingUp, 
+  AlertCircle,
+  CheckCircle2,
+  Clock,
+  XCircle,
+  RefreshCw,
+  Sparkles
+} from 'lucide-react';
 
 export default function DashboardPage() {
+  // #region agent log
+  fetch('http://127.0.0.1:7242/ingest/42a6e371-a260-4cac-86bc-330a22a2e900',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'dashboard/page.tsx:27',message:'DashboardPage component rendering',data:{timestamp:Date.now()},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+  // #endregion
   const router = useRouter();
   const [homeData, setHomeData] = useState<HomeData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -23,10 +38,16 @@ export default function DashboardPage() {
   }, []);
 
   const loadHomeData = async () => {
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/42a6e371-a260-4cac-86bc-330a22a2e900',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'dashboard/page.tsx:37',message:'loadHomeData called',data:{timestamp:Date.now()},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
+    // #endregion
     try {
       setIsLoading(true);
       setError('');
       const response = await profileApi.getHomeData();
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/42a6e371-a260-4cac-86bc-330a22a2e900',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'dashboard/page.tsx:41',message:'API response received',data:{hasResponse:!!response,responseType:(response as any)?.type},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
+      // #endregion
       // The home endpoint returns data directly (not nested in data property)
       if ((response as any).type === 'success') {
         setHomeData(response as any as HomeData);
@@ -37,6 +58,9 @@ export default function DashboardPage() {
         setError((response as any).message || 'Failed to load dashboard data');
       }
     } catch (err: any) {
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/42a6e371-a260-4cac-86bc-330a22a2e900',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'dashboard/page.tsx:52',message:'loadHomeData error',data:{error:err?.message,hasResponse:!!err?.response},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
+      // #endregion
       setError(err.response?.data?.message || err.message || 'An error occurred');
     } finally {
       setIsLoading(false);
@@ -44,15 +68,26 @@ export default function DashboardPage() {
   };
 
   if (isLoading) {
-    return <Loading />;
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent mx-auto"></div>
+          <p className="mt-4 text-gray-600 font-medium">Loading dashboard...</p>
+        </div>
+      </div>
+    );
   }
 
   if (error || !homeData) {
     return (
-      <div className="p-4">
-        <Card>
-          <p className="text-red-600">{error || 'Failed to load dashboard data'}</p>
-          <Button onClick={loadHomeData} className="mt-4">
+      <div className="max-w-2xl mx-auto">
+        <Card className="p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <AlertCircle className="w-5 h-5 text-red-600" />
+            <p className="text-red-600 font-medium">{error || 'Failed to load dashboard data'}</p>
+          </div>
+          <Button onClick={loadHomeData} variant="outline" className="w-full sm:w-auto">
+            <RefreshCw className="w-4 h-4 mr-2" />
             Retry
           </Button>
         </Card>
@@ -63,91 +98,122 @@ export default function DashboardPage() {
   const { day_book, wallet_balance, name, announcement } = homeData;
 
   return (
-    <div className="px-4">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Welcome, {name}</h1>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-1">
+            Welcome back, <span className="text-blue-600">{name}</span>
+          </h1>
+          <p className="text-gray-600">Here's what's happening with your account today</p>
+        </div>
         {announcement && (
-          <div className="mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <div className="flex items-start gap-3 p-4 bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-lg shadow-sm">
+            <AlertCircle className="w-5 h-5 text-yellow-600 mt-0.5 shrink-0" />
             <p className="text-sm text-yellow-800">{announcement}</p>
           </div>
         )}
       </div>
 
-      <div className="mb-6">
-        <WalletBalance balance={wallet_balance} />
-      </div>
+      {/* Wallet Balance */}
+      <WalletBalance balance={wallet_balance} />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatsCard
           title="Success"
           amount={day_book.rc_success_amount}
           count={day_book.rc_success_hit}
           variant="success"
+          icon={CheckCircle2}
         />
         <StatsCard
           title="Pending"
           amount={day_book.rc_pending_amount}
           count={day_book.rc_pending_hit}
           variant="pending"
+          icon={Clock}
         />
         <StatsCard
           title="Failed"
           amount={day_book.rc_failed_amount}
           count={day_book.rc_failed_hit}
           variant="failed"
+          icon={XCircle}
         />
         <StatsCard
           title="Refund"
           amount={day_book.rc_refund_amount}
           count={day_book.rc_refund_hit}
           variant="refund"
+          icon={RefreshCw}
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <Card>
-          <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
+      {/* Quick Actions and Summary */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card className="p-6">
+          <div className="flex items-center gap-2 mb-6">
+            <Sparkles className="w-5 h-5 text-blue-600" />
+            <h3 className="text-lg font-semibold text-gray-900">Quick Actions</h3>
+          </div>
           <div className="space-y-3">
             <Link href="/recharge">
-              <Button className="w-full">
-                Mobile Recharge
+              <Button className="w-full h-12 text-base font-medium justify-between group">
+                <div className="flex items-center gap-3">
+                  <Smartphone className="w-5 h-5" />
+                  <span>Mobile Recharge</span>
+                </div>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
             <Link href="/wallet/add-money">
-              <Button className="w-full">
-                Add Money
+              <Button variant="outline" className="w-full h-12 text-base font-medium justify-between group">
+                <div className="flex items-center gap-3">
+                  <Wallet className="w-5 h-5" />
+                  <span>Add Money</span>
+                </div>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
             <Link href="/wallet">
-              <Button className="w-full" >
-                Fund Transfer
+              <Button variant="outline" className="w-full h-12 text-base font-medium justify-between group">
+                <div className="flex items-center gap-3">
+                  <TrendingUp className="w-5 h-5" />
+                  <span>Fund Transfer</span>
+                </div>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
           </div>
         </Card>
 
-        <Card>
-          <h3 className="text-lg font-semibold mb-4">Today's Summary</h3>
-          <div className="space-y-2">
-            <div className="flex justify-between">
-              <span className="text-gray-600">Total Received:</span>
-              <span className="font-semibold">₹{day_book.rc_receive_money.toFixed(2)}</span>
+        <Card className="p-6">
+          <div className="flex items-center gap-2 mb-6">
+            <TrendingUp className="w-5 h-5 text-blue-600" />
+            <h3 className="text-lg font-semibold text-gray-900">Today's Summary</h3>
+          </div>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <span className="text-gray-600 font-medium">Total Received</span>
+              <span className="text-lg font-bold text-gray-900">₹{day_book.rc_receive_money.toFixed(2)}</span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Commission Earned:</span>
-              <span className="font-semibold text-green-600">
+            <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+              <span className="text-gray-700 font-medium">Commission Earned</span>
+              <span className="text-lg font-bold text-green-600">
                 ₹{day_book.rc_commission.toFixed(2)}
               </span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Complaints:</span>
-              <span className="font-semibold">{day_book.rc_complaint_hit}</span>
+            <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+              <span className="text-gray-700 font-medium">Complaints</span>
+              <span className="text-lg font-bold text-blue-600">{day_book.rc_complaint_hit}</span>
             </div>
           </div>
         </Card>
       </div>
 
-      <div className="mb-6">
+      {/* Recent Transactions */}
+      <div>
         <RecentTransactions transactions={[]} />
       </div>
     </div>
