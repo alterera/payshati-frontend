@@ -42,18 +42,12 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // #region agent log
-  fetch('http://127.0.0.1:7242/ingest/42a6e371-a260-4cac-86bc-330a22a2e900',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'layout.tsx:40',message:'DashboardLayout component rendering',data:{timestamp:Date.now()},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
-  // #endregion
   const router = useRouter();
   const pathname = usePathname();
   const { isAuthenticated, isInitialized, logout, userData } = useAuth();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   useEffect(() => {
-    // #region agent log
-    fetch('http://127.0.0.1:7242/ingest/42a6e371-a260-4cac-86bc-330a22a2e900',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'layout.tsx:50',message:'Auth check effect',data:{isInitialized,isAuthenticated},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'D'})}).catch(()=>{});
-    // #endregion
     if (isInitialized && !isAuthenticated) {
       router.push('/login');
     }

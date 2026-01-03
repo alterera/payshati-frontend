@@ -25,9 +25,6 @@ import {
 } from 'lucide-react';
 
 export default function DashboardPage() {
-  // #region agent log
-  fetch('http://127.0.0.1:7242/ingest/42a6e371-a260-4cac-86bc-330a22a2e900',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'dashboard/page.tsx:27',message:'DashboardPage component rendering',data:{timestamp:Date.now()},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
-  // #endregion
   const router = useRouter();
   const [homeData, setHomeData] = useState<HomeData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -38,16 +35,10 @@ export default function DashboardPage() {
   }, []);
 
   const loadHomeData = async () => {
-    // #region agent log
-    fetch('http://127.0.0.1:7242/ingest/42a6e371-a260-4cac-86bc-330a22a2e900',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'dashboard/page.tsx:37',message:'loadHomeData called',data:{timestamp:Date.now()},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
-    // #endregion
     try {
       setIsLoading(true);
       setError('');
       const response = await profileApi.getHomeData();
-      // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/42a6e371-a260-4cac-86bc-330a22a2e900',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'dashboard/page.tsx:41',message:'API response received',data:{hasResponse:!!response,responseType:(response as any)?.type},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
-      // #endregion
       // The home endpoint returns data directly (not nested in data property)
       if ((response as any).type === 'success') {
         setHomeData(response as any as HomeData);
@@ -58,9 +49,6 @@ export default function DashboardPage() {
         setError((response as any).message || 'Failed to load dashboard data');
       }
     } catch (err: any) {
-      // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/42a6e371-a260-4cac-86bc-330a22a2e900',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'dashboard/page.tsx:52',message:'loadHomeData error',data:{error:err?.message,hasResponse:!!err?.response},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
-      // #endregion
       setError(err.response?.data?.message || err.message || 'An error occurred');
     } finally {
       setIsLoading(false);

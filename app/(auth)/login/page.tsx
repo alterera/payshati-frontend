@@ -13,9 +13,6 @@ import { LoginRequest } from '@/types/api';
 import { Smartphone, Lock, ArrowRight, Sparkles } from 'lucide-react';
 
 export default function LoginPage() {
-  // #region agent log
-  fetch('http://127.0.0.1:7242/ingest/42a6e371-a260-4cac-86bc-330a22a2e900',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'login/page.tsx:15',message:'LoginPage component rendering',data:{timestamp:Date.now()},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
-  // #endregion
   const router = useRouter();
   const { login, isAuthenticated, isInitialized } = useAuth();
   const [mobileNumber, setMobileNumber] = useState('');
