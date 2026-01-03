@@ -1,9 +1,67 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { AdminAuthProvider, useAdminAuth } from '../../lib/context/AdminAuthContext';
 import Link from 'next/link';
+import Image from 'next/image';
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
+  SidebarProvider,
+  SidebarInset,
+  SidebarTrigger,
+} from '../../components/ui/sidebar';
+import {
+  LayoutDashboard,
+  Settings,
+  FileText,
+  Users,
+  DollarSign,
+  BarChart3,
+  Building2,
+  HelpCircle,
+  User,
+  LogOut,
+  ChevronRight,
+  ChevronDown,
+  CreditCard,
+  Smartphone,
+  Server,
+  MapPin,
+  Banknote,
+  Ban,
+  RefreshCw,
+  Globe,
+  UserCog,
+  Megaphone,
+  Image as ImageIcon,
+  Shield,
+  Plug,
+  List,
+  MessageSquare,
+  Inbox,
+  TrendingUp,
+  FileBarChart,
+  ClipboardList,
+  Building,
+  Mail,
+  MessageCircle,
+  Route,
+  ClipboardCheck,
+} from 'lucide-react';
+import { Button } from '../../components/ui/Button';
 
 function AdminLayoutContent({
   children,
@@ -13,6 +71,8 @@ function AdminLayoutContent({
   const router = useRouter();
   const pathname = usePathname();
   const { isAuthenticated, isInitialized, logout, userData } = useAdminAuth();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [openDropdowns, setOpenDropdowns] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     // Only redirect after initialization is complete and not on login page
@@ -50,163 +110,265 @@ function AdminLayoutContent({
     );
   }
 
-  const navLinks = [
-    { href: '/admin/dashboard', label: 'Dashboard', icon: '📊' },
+  const navItems = [
     {
-      label: 'System Management',
-      icon: '⚙️',
-      children: [
-        { href: '/admin/system/schemes', label: 'Schemes', icon: '📋' },
-        { href: '/admin/system/providers', label: 'Providers', icon: '📱' },
-        { href: '/admin/system/services', label: 'Services', icon: '🔧' },
-        { href: '/admin/system/states', label: 'States', icon: '🗺️' },
-        { href: '/admin/system/banks', label: 'Banks', icon: '🏦' },
-        { href: '/admin/system/amount-block', label: 'Amount Block', icon: '🚫' },
-        { href: '/admin/system/amount-wise-switch', label: 'Amount-wise Switch', icon: '🔄' },
-        { href: '/admin/system/state-wise-switch', label: 'State-wise Switch', icon: '🗺️' },
-        { href: '/admin/system/user-wise-switch', label: 'User-wise Switch', icon: '👤' },
-        { href: '/admin/system/announcement', label: 'Announcement', icon: '📢' },
-        { href: '/admin/system/slider', label: 'Slider', icon: '🖼️' },
-        { href: '/admin/system/role', label: 'Role', icon: '🎭' },
-        { href: '/admin/system/apis', label: 'APIs', icon: '🔌' },
+      title: 'Dashboard',
+      url: '/admin/dashboard',
+      icon: LayoutDashboard,
+    },
+    {
+      title: 'System Management',
+      icon: Settings,
+      items: [
+        { title: 'Schemes', url: '/admin/system/schemes', icon: FileText },
+        { title: 'Providers', url: '/admin/system/providers', icon: Smartphone },
+        { title: 'Services', url: '/admin/system/services', icon: Server },
+        { title: 'States', url: '/admin/system/states', icon: MapPin },
+        { title: 'Banks', url: '/admin/system/banks', icon: Banknote },
+        { title: 'Amount Block', url: '/admin/system/amount-block', icon: Ban },
+        { title: 'Amount-wise Switch', url: '/admin/system/amount-wise-switch', icon: RefreshCw },
+        { title: 'State-wise Switch', url: '/admin/system/state-wise-switch', icon: Globe },
+        { title: 'User-wise Switch', url: '/admin/system/user-wise-switch', icon: UserCog },
+        { title: 'Announcement', url: '/admin/system/announcement', icon: Megaphone },
+        { title: 'Slider', url: '/admin/system/slider', icon: ImageIcon },
+        { title: 'Role', url: '/admin/system/role', icon: Shield },
+        { title: 'APIs', url: '/admin/system/apis', icon: Plug },
       ],
     },
     {
-      label: 'User Management',
-      icon: '👥',
-      children: [
-        { href: '/admin/users/userlist', label: 'User List', icon: '📝' },
-        { href: '/admin/users/send-message', label: 'Send Message', icon: '💬' },
+      title: 'User Management',
+      icon: Users,
+      items: [
+        { title: 'User List', url: '/admin/users/userlist', icon: List },
+        { title: 'Send Message', url: '/admin/users/send-message', icon: MessageSquare },
       ],
     },
     {
-      label: 'Fund Management',
-      icon: '💰',
-      children: [
-        { href: '/admin/fund/fund-request', label: 'Fund Request', icon: '📥' },
-        { href: '/admin/fund/fund-report', label: 'Fund Report', icon: '📊' },
+      title: 'Fund Management',
+      icon: DollarSign,
+      items: [
+        { title: 'Fund Request', url: '/admin/fund/fund-request', icon: Inbox },
+        { title: 'Fund Report', url: '/admin/fund/fund-report', icon: FileBarChart },
       ],
     },
     {
-      label: 'Reports',
-      icon: '📈',
-      children: [
-        { href: '/admin/reports/account-report', label: 'Account Report', icon: '💳' },
-        { href: '/admin/reports/recharge-report', label: 'Recharge Report', icon: '📱' },
-        { href: '/admin/reports/admin-reports', label: 'Admin Reports', icon: '📊' },
+      title: 'Reports',
+      icon: BarChart3,
+      items: [
+        { title: 'Account Report', url: '/admin/reports/account-report', icon: CreditCard },
+        { title: 'Recharge Report', url: '/admin/reports/recharge-report', icon: Smartphone },
+        { title: 'Admin Reports', url: '/admin/reports/admin-reports', icon: TrendingUp },
       ],
     },
     {
-      label: 'Company Settings',
-      icon: '🏢',
-      children: [
-        { href: '/admin/company/manage-company', label: 'Manage Company', icon: '🏛️' },
-        { href: '/admin/company/email-template', label: 'Email Template', icon: '📧' },
-        { href: '/admin/company/sms-template', label: 'SMS Template', icon: '💬' },
-        { href: '/admin/company/routes-settings', label: 'Routes Settings', icon: '🛣️' },
+      title: 'Company Settings',
+      icon: Building2,
+      items: [
+        { title: 'Manage Company', url: '/admin/company/manage-company', icon: Building },
+        { title: 'Email Template', url: '/admin/company/email-template', icon: Mail },
+        { title: 'SMS Template', url: '/admin/company/sms-template', icon: MessageCircle },
+        { title: 'Routes Settings', url: '/admin/company/routes-settings', icon: Route },
       ],
     },
     {
-      label: 'Support',
-      icon: '🆘',
-      children: [
-        { href: '/admin/support/complaint', label: 'Complaint', icon: '📋' },
-        { href: '/admin/profile', label: 'My Profile', icon: '👤' },
+      title: 'Support',
+      icon: HelpCircle,
+      items: [
+        { title: 'Complaint', url: '/admin/support/complaint', icon: ClipboardCheck },
+        { title: 'My Profile', url: '/admin/profile', icon: User },
       ],
     },
   ];
 
-  const isActive = (href: string) => pathname === href || pathname.startsWith(href + '/');
+  // Initialize dropdown states based on pathname
+  useEffect(() => {
+    const navItemsList = [
+      'System Management',
+      'User Management',
+      'Fund Management',
+      'Reports',
+      'Company Settings',
+      'Support',
+    ];
+    
+    navItemsList.forEach((title) => {
+      const item = navItems.find((i) => i.title === title);
+      if (item?.items) {
+        const isActive = item.items.some(
+          (subItem) => pathname === subItem.url || pathname.startsWith(subItem.url + '/')
+        );
+        if (isActive) {
+          setOpenDropdowns((prev) => ({ ...prev, [title]: true }));
+        }
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
+
+  const toggleDropdown = (title: string) => {
+    setOpenDropdowns((prev) => ({
+      ...prev,
+      [title]: !prev[title],
+    }));
+  };
+
+  const isDropdownOpen = (title: string) => openDropdowns[title] ?? false;
+
+  const isItemActive = (item: typeof navItems[0]) => {
+    if (item.items) {
+      return item.items.some(
+        (subItem) => pathname === subItem.url || pathname.startsWith(subItem.url + '/')
+      );
+    }
+    return pathname === item.url || pathname.startsWith(item.url + '/');
+  };
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await logout();
+      router.push('/admin/login');
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Top Navigation */}
-      <nav className="bg-white shadow-md border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <h1 className="text-xl font-bold text-blue-600">Payshati Admin</h1>
-            </div>
-            <div className="flex items-center space-x-4">
-              {userData && (
-                <span className="text-sm text-gray-700">
-                  {userData.name || 'Admin'}
-                </span>
-              )}
+    <SidebarProvider defaultOpen={true}>
+      <Sidebar>
+        <SidebarHeader className="border-b">
+          <div className="flex items-center gap-2 px-3 md:px-4 py-2.5 md:py-3">
+            <Image
+              src="/logo-black.png"
+              alt="Payshati Admin Logo"
+              width={100}
+              height={80}
+              className="h-6 w-auto shrink-0"
+              priority
+            />
+            {/* <div className="flex flex-col min-w-0">
+              <span className="text-base md:text-lg font-bold text-gray-900 truncate">
+                Payshati Admin
+              </span>
+              <span className="text-xs text-gray-500 truncate hidden group-data-[collapsible=icon]:hidden">
+                Admin Panel
+              </span>
+            </div> */}
+          </div>
+        </SidebarHeader>
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {navItems.map((item) => {
+                  const hasItems = item.items && item.items.length > 0;
+                  const dropdownOpen = hasItems ? isDropdownOpen(item.title) : false;
+                  const itemActive = isItemActive(item);
+
+                  return (
+                    <SidebarMenuItem key={item.title}>
+                      {hasItems ? (
+                        <>
+                          <SidebarMenuButton
+                            isActive={itemActive}
+                            tooltip={item.title}
+                            onClick={() => toggleDropdown(item.title)}
+                            className="cursor-pointer"
+                          >
+                            <item.icon />
+                            <span>{item.title}</span>
+                            {dropdownOpen ? (
+                              <ChevronDown className="ml-auto transition-transform duration-200" />
+                            ) : (
+                              <ChevronRight className="ml-auto transition-transform duration-200" />
+                            )}
+                          </SidebarMenuButton>
+                          {dropdownOpen && (
+                            <SidebarMenuSub>
+                              {item.items!.map((subItem) => {
+                                const subActive =
+                                  pathname === subItem.url || pathname.startsWith(subItem.url + '/');
+                                return (
+                                  <SidebarMenuSubItem key={subItem.title}>
+                                    <SidebarMenuSubButton
+                                      asChild
+                                      isActive={subActive}
+                                    >
+                                      <Link href={subItem.url}>
+                                        <subItem.icon className="w-4 h-4" />
+                                        <span>{subItem.title}</span>
+                                      </Link>
+                                    </SidebarMenuSubButton>
+                                  </SidebarMenuSubItem>
+                                );
+                              })}
+                            </SidebarMenuSub>
+                          )}
+                        </>
+                      ) : (
+                        <SidebarMenuButton
+                          asChild
+                          isActive={itemActive}
+                          tooltip={item.title}
+                        >
+                          <Link href={item.url!}>
+                            <item.icon />
+                            <span>{item.title}</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      )}
+                    </SidebarMenuItem>
+                  );
+                })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+        <SidebarFooter className="border-t">
+          <div className="p-2">
+            <Button
+              variant="ghost"
+              className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
+              onClick={handleLogout}
+              disabled={isLoggingOut}
+            >
+              <LogOut className="w-4 h-4" />
+              <span>{isLoggingOut ? 'Logging out...' : 'Logout'}</span>
+            </Button>
+          </div>
+        </SidebarFooter>
+      </Sidebar>
+      <SidebarInset>
+        <header className="sticky top-0 z-10 flex h-14 md:h-16 shrink-0 items-center gap-2 border-b bg-white/80 backdrop-blur-sm px-3 md:px-4">
+          <SidebarTrigger className="-ml-1 size-7 md:size-8" />
+          <div className="flex-1" />
+          {userData && (
+            <div className="flex items-center gap-2 text-xs md:text-sm text-gray-600">
+              <div className="flex items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-full bg-blue-100">
+                <User className="w-3.5 h-3.5 md:w-4 md:h-4 text-blue-600" />
+              </div>
+              <span className="font-medium hidden sm:inline">
+                {userData.name || 'Admin'}
+              </span>
               <Link
                 href="/admin/profile"
-                className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+                className="hidden sm:inline-block px-3 py-1.5 text-xs md:text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
               >
                 Profile
               </Link>
-              <button
-                onClick={logout}
-                className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
-              >
-                Logout
-              </button>
             </div>
+          )}
+        </header>
+        <main className="flex-1 overflow-auto p-3 sm:p-4 md:p-6 lg:p-8 bg-gradient-to-br from-gray-50 to-blue-50/30 min-h-[calc(100vh-3.5rem)] md:min-h-[calc(100vh-4rem)]">
+          <div className="max-w-7xl mx-auto w-full">
+            {children}
           </div>
-        </div>
-      </nav>
-
-      <div className="flex">
-        {/* Sidebar */}
-        <aside className="w-64 bg-white shadow-md min-h-[calc(100vh-4rem)] overflow-y-auto">
-          <nav className="p-4">
-            <ul className="space-y-1">
-              {navLinks.map((link) => {
-                if (link.children) {
-                  return (
-                    <li key={link.label} className="mb-2">
-                      <div className="flex items-center px-4 py-2 text-gray-700 font-medium text-sm uppercase">
-                        <span className="mr-2">{link.icon}</span>
-                        {link.label}
-                      </div>
-                      <ul className="ml-4 mt-1 space-y-1">
-                        {link.children.map((child) => (
-                          <li key={child.href}>
-                            <Link
-                              href={child.href}
-                              className={`flex items-center px-4 py-2 rounded-lg transition-colors text-sm ${
-                                isActive(child.href)
-                                  ? 'bg-blue-100 text-blue-700 font-medium'
-                                  : 'text-gray-600 hover:bg-gray-100'
-                              }`}
-                            >
-                              <span className="mr-2">{child.icon}</span>
-                              {child.label}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </li>
-                  );
-                }
-                return (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
-                        isActive(link.href)
-                          ? 'bg-blue-100 text-blue-700 font-medium'
-                          : 'text-gray-700 hover:bg-gray-100'
-                      }`}
-                    >
-                      <span className="mr-2">{link.icon}</span>
-                      {link.label}
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </nav>
-        </aside>
-
-        {/* Main Content */}
-        <main className="flex-1 p-6">{children}</main>
-      </div>
-    </div>
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
 

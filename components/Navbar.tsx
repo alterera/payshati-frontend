@@ -166,7 +166,7 @@ export function Navbar() {
                 asChild
               >
                 <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
-                  Login
+                Login
                 </Link>
               </Button>
               <Button
